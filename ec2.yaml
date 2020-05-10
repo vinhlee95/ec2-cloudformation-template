@@ -1,3 +1,9 @@
+---
+Parameters:
+  HttpSecurityGroupDescription:
+    Description: Enter description for this Http security group
+    Type: String
+
 Resources:
   MyInstance:
     Type: AWS::EC2::Instance
@@ -31,8 +37,8 @@ Resources:
   HTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: EC2HTTP
-      GroupDescription: Allow HTTP traffic via port 80
+      GroupName: EC2HTTPGroup
+      GroupDescription: !Ref HttpSecurityGroupDescription
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
         FromPort: 80
