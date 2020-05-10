@@ -4,13 +4,21 @@ Parameters:
     Description: Enter description for this Http security group
     Type: String
 
+Mappings:
+  RegionMap:
+    eu-north-1:
+      "linux64": "ami-0c5254b956817b326"
+      "AZ": "eu-north-1a"
+      "instanceType": "t3.micro"
+
+
 Resources:
   MyInstance:
     Type: AWS::EC2::Instance
     Properties:
-      AvailabilityZone: eu-north-1a
-      ImageId: ami-0c5254b956817b326
-      InstanceType: t3.micro
+      AvailabilityZone: !FindInMap [RegionMap, !Ref "AWS::Region", "AZ"]
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "linux64"]
+      InstanceType: !FindInMap [RegionMap, !Ref "AWS::Region", "instanceType"]
       SecurityGroups:
         - !Ref SSHSecurityGroup
         - !Ref HTTPSecurityGroup
