@@ -1,8 +1,20 @@
 ---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample:
+  Create an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based
+  on the region in which the stack is run. This example creates an EC2 security group
+  for the instance to give you SSH access. **WARNING** This template creates an Amazon
+  EC2 instance. You will be billed for the AWS resources used if you create a stack
+  from this template.'
+
 Parameters:
   HttpSecurityGroupDescription:
-    Description: Enter description for this Http security group
+    Description: Description for this Http security group
     Type: String
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
 
 Mappings:
   RegionMap:
@@ -11,6 +23,12 @@ Mappings:
       "AZ": "eu-north-1a"
       "instanceType": "t3.micro"
 
+Outputs:
+  SudoSSHSecurityGroup:
+    Description: SSH security group
+    Value: !Ref SSHSecurityGroup
+    Export:
+      Name: SudoSSH
 
 Resources:
   MyInstance:
@@ -28,6 +46,8 @@ Resources:
     Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref MyInstance
+      KeyName:
+        Ref: KeyName
 
   # EC2 Security Group
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#cfn-ec2-securitygroup-groupdescription
@@ -45,7 +65,7 @@ Resources:
   HTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: EC2HTTPGroup
+      GroupName: EC2CFHTTPGroup
       GroupDescription: !Ref HttpSecurityGroupDescription
       SecurityGroupIngress:
       - CidrIp: 0.0.0.0/0
