@@ -37,6 +37,7 @@ Resources:
       AvailabilityZone: !FindInMap [RegionMap, !Ref "AWS::Region", "AZ"]
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "linux64"]
       InstanceType: !FindInMap [RegionMap, !Ref "AWS::Region", "instanceType"]
+      KeyName: !Ref KeyName
       SecurityGroups:
         - !Ref SSHSecurityGroup
         - !Ref HTTPSecurityGroup
@@ -46,8 +47,6 @@ Resources:
     Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref MyInstance
-      KeyName:
-        Ref: KeyName
 
   # EC2 Security Group
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#cfn-ec2-securitygroup-groupdescription

@@ -1,0 +1,14 @@
+{
+  "name": "cf-ec2-sandbox",
+  "version": "1.0.0",
+  "description": "EC2 CloudFormation Template",
+  "main": "index.js",
+  "repository": "git@github.com:vinhlee95/ec2-cloudformation-template.git",
+  "author": "Vinh Le <lethanhvinh95@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "deploy": "aws cloudformation create-stack --stack-name ec2 --template-body file://ec2.yaml --parameters file://parameters.json",
+    "deploy:update": "aws cloudformation update-stack --stack-name ec2 --template-body  file://ec2.yaml --parameters file://parameters.json"
+  }
+}
