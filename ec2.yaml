@@ -23,13 +23,6 @@ Mappings:
       "AZ": "eu-north-1a"
       "instanceType": "t3.micro"
 
-Outputs:
-  SudoSSHSecurityGroup:
-    Description: SSH security group
-    Value: !Ref SSHSecurityGroup
-    Export:
-      Name: SudoSSH
-
 Resources:
   MyInstance:
     Type: AWS::EC2::Instance
@@ -39,27 +32,18 @@ Resources:
       InstanceType: !FindInMap [RegionMap, !Ref "AWS::Region", "instanceType"]
       KeyName: !Ref KeyName
       SecurityGroups:
-        - !Ref SSHSecurityGroup
         - !Ref HTTPSecurityGroup
+
+  SSHSecurityGroupStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: "https://cf-ssh-security-stack.s3.eu-north-1.amazonaws.com/ssh-security-group.yaml"
 
   # Elastic IP for the instance
   MyEIP:
     Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref MyInstance
-
-  # EC2 Security Group
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#cfn-ec2-securitygroup-groupdescription
-  SSHSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: EC2SSH
-      GroupDescription: Enable SSH access via port 22
-      SecurityGroupIngress:
-      - CidrIp: 0.0.0.0/0
-        FromPort: 22
-        IpProtocol: tcp
-        ToPort: 22
 
   HTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
