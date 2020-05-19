@@ -5,6 +5,6 @@
 	},
 	{
 		"ParameterKey": "KeyName",
-		"ParameterValue": "ec2-cf"
+		"ParameterValue": "ec2-general"
 	}
 ]
